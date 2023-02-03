@@ -17,7 +17,6 @@ const io = new socketIO.Server(server, {
     cors: {
          origin: "https://queryboat.netlify.app",
          methods: ["GET", "POST"],
-         allowedHeaders: ["my-custom-header"],
          credentials: true
   }
 })
