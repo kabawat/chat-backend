@@ -1,33 +1,36 @@
 const express = require('express')
 const http = require('http')
 const cors = require('cors')
-const fs = require('fs');
 const app = express()
+const cookieParser = require('cookie-parser')
 const dotenv = require('dotenv').config()
 const userAuth = require('./router')
+const server = http.createServer(app)
 const socketIO = require('socket.io')
 const port = process.env.PORT || 2917
 const { socketModal } = require('./controller/connection')
 app.use(express.json())
-app.use(cors({ 
-    origin:'https://queryboat.netlify.app',
-}))
+const corsOptions = {
+    origin:"https://queryboat.netlify.app",
+    credentials: true,
+    withCredentials: true,
+};
+
+app.use(cors(corsOptions))
 app.use(express.urlencoded({ extended: true }))
 
-app.use(function(req, res, next) {
-      res.header("Access-Control-Allow-Origin", "https://www.differentServerDomain.fr https://www.differentServerDomain.fr");
-      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-      next();
-});
-    var options = {
-        key: fs.readFileSync('/etc/letsencrypt/live/devpeter.net/privkey.pem'),
-        cert: fs.readFileSync('/etc/letsencrypt/live/devpeter.net/fullchain.pem')
-    };
-var server = https.createServer(app,options);
-var io = socketIO(server);
+const io = new socketIO.Server(server, {
+    cors: {
+        origin: "https://queryboat.netlify.app",
+        methods: ['GET', 'POST'],
+        credentials: true,
+    },
+    withCredentials: true,
+})
 
+app.use(cookieParser())
 app.use(userAuth)
-app.get("/", (req, res)=>{res.send("welcome to Query Boat")})
+
 server.listen(port, () => {
     console.log(`click here http://localhost:${port}`)
 })
