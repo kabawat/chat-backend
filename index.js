@@ -13,11 +13,15 @@ app.use(express.json())
 const corsOptions = {
     origin:"https://queryboat.netlify.app",
     credentials: true,
-    withCredentials: true,
 };
 
 app.use(cors(corsOptions))
 app.use(express.urlencoded({ extended: true }))
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "https://queryboat.netlify.app/");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 const io = new socketIO.Server(server, {
     cors: {
@@ -25,7 +29,6 @@ const io = new socketIO.Server(server, {
         methods: ['GET', 'POST'],
         credentials: true,
     },
-    withCredentials: true,
 })
 
 app.use(cookieParser())
