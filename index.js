@@ -17,7 +17,12 @@ const corsOptions = {
 
 app.use(cors(corsOptions))
 app.use(express.urlencoded({ extended: true }))
-const io = new socketIO.Server(server)
+const io = new socketIO.Server(server,{
+cors: {
+        origin: "https://queryboat.netlify.app",
+        methods: ['GET', 'POST']
+    }
+})
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "https://queryboat.netlify.app");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
