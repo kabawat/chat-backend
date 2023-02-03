@@ -1,0 +1,23 @@
+const express = require('express')
+const userAuth = express.Router()
+const { singUpValidation, Signup } = require('../controller/signup')
+const { login, loginVerify } = require('../controller/login')
+const { userVerify, verify } = require('../controller/auth')
+const { logout } = require('../controller/logout')
+const { AllUser, userProfile, chatUserInfo, getReceiverProfile } = require('../controller/all_user')
+const { newchat, chatList } = require('../controller/chatAPI')
+const { deleteChat } = require('../controller/delete/chatDelete')
+userAuth.post('/signup', singUpValidation, Signup)
+userAuth.post('/login', loginVerify, login)
+userAuth.get('/verify', verify, userVerify)
+userAuth.get('/logout', logout)
+userAuth.get('/all_User', verify, AllUser)
+userAuth.get('/profile', userProfile)
+userAuth.post('/newchat', newchat)
+userAuth.get('/userChat', chatList)
+userAuth.get('/chatUser_Information', chatUserInfo)
+userAuth.get('/receiver_profile', verify, getReceiverProfile)
+
+// delete API 
+userAuth.delete('/delete-chat', deleteChat)
+module.exports = userAuth
