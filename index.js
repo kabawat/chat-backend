@@ -15,16 +15,14 @@ const corsOptions = {
         "https://queryboat.netlify.app",
         "http://localhost:3000",
     ],
-    credentials: true,
-    exposedHeaders: ["set-cookie"],
 };
 
-app.use(cors(corsOptions))
+app.use(cors())
 app.use(express.urlencoded({ extended: true }))
 
 const io = new socketIO.Server(server, {
     cors: {
-        origin: '*',
+        origin: 'https://queryboat.netlify.app',
         methods: ['GET', 'POST']
     }
 })
