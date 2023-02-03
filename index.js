@@ -23,7 +23,7 @@ app.use(function(req, res, next) {
         key: fs.readFileSync('/etc/letsencrypt/live/devpeter.net/privkey.pem'),
         cert: fs.readFileSync('/etc/letsencrypt/live/devpeter.net/fullchain.pem')
     };
-var server = https.createServer(options, app);
+var server = https.createServer(app,options);
 var io = socketIO(server);
 
 app.use(userAuth)
