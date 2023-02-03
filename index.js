@@ -10,16 +10,8 @@ const socketIO = require('socket.io')
 
 const { socketModal } = require('./controller/connection')
 app.use(express.json())
-const corsOptions = {
-    origin: [
-        "https://queryboat.netlify.app",
-        "http://localhost:3000",
-    ],
-};
-
-app.use(cors())
+app.use(cors({ origin: 'https://queryboat.netlify.app' }))
 app.use(express.urlencoded({ extended: true }))
-
 const io = new socketIO.Server(server, {
     cors: {
         origin: 'https://queryboat.netlify.app',
