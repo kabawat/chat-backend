@@ -18,7 +18,7 @@ app.use(cors({
 app.use(express.urlencoded({ extended: true }))
 const io = new socketIO.Server(server, {
     cors: {
-        origin:  origin: ['https://queryboat.netlify.app', '*'] 
+        origin:  ['https://queryboat.netlify.app', '*'] 
         methods: ['GET', 'POST'],
         someSite : 'none',
         secure : true
