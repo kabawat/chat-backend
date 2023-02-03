@@ -2,33 +2,26 @@ const express = require('express')
 const http = require('http')
 const cors = require('cors')
 const app = express()
-const cookieParser = require('cookie-parser')
 const dotenv = require('dotenv').config()
 const userAuth = require('./router')
 const server = http.createServer(app)
 const socketIO = require('socket.io')
-
+const port = process.env.PORT || 2917
 const { socketModal } = require('./controller/connection')
 app.use(express.json())
 app.use(cors({ 
-    origin: ['https://queryboat.netlify.app', '*'], 
-    someSite : 'none',
-        secure : true 
+    origin:'https://queryboat.netlify.app',
 }))
 app.use(express.urlencoded({ extended: true }))
 const io = new socketIO.Server(server, {
     cors: {
-        origin:  ['https://queryboat.netlify.app', '*'] 
-        methods: ['GET', 'POST'],
-        someSite : 'none',
-        secure : true
+        origin: 'https://queryboat.netlify.app'
     }
 })
-app.use(cookieParser())
 app.use(userAuth)
 app.get("/", (req, res)=>{res.send("welcome to Query Boat")})
-server.listen(process.env.PORT, () => {
-    console.log(`click here http://localhost:${process.env.PORT}`)
+server.listen(port, () => {
+    console.log(`click here http://localhost:${port}`)
 })
 
 // socket data 
