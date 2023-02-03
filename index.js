@@ -23,13 +23,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-const io = new socketIO.Server(server, {
-    cors: {
-        origin: "https://queryboat.netlify.app",
-        methods: ['GET', 'POST'],
-        credentials: true,
-    },
-})
+const io = new socketIO.Server(server)
 
 app.use(cookieParser())
 app.use(userAuth)
