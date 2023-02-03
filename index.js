@@ -24,8 +24,6 @@ const io = new socketIO.Server(server, {
         secure : true
     }
 })
-io.origins(['https://queryboat.netlify.app']);
-
 app.use(cookieParser())
 app.use(userAuth)
 app.get("/", (req, res)=>{res.send("welcome to Query Boat")})
