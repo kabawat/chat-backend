@@ -20,6 +20,12 @@ const io = new socketIO.Server(server, {
          credentials: true
   }
 })
+app.use(function(req, res, next) {
+      res.header("Access-Control-Allow-Origin", "https://www.differentServerDomain.fr https://www.differentServerDomain.fr");
+      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+      next();
+});
+
 app.use(userAuth)
 app.get("/", (req, res)=>{res.send("welcome to Query Boat")})
 server.listen(port, () => {
