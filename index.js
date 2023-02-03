@@ -10,14 +10,21 @@ const socketIO = require('socket.io')
 
 const { socketModal } = require('./controller/connection')
 app.use(express.json())
-app.use(cors({ origin: ['https://queryboat.netlify.app', '*'] }))
+app.use(cors({ 
+    origin: ['https://queryboat.netlify.app', '*'], 
+    someSite : 'none',
+        secure : true 
+}))
 app.use(express.urlencoded({ extended: true }))
 const io = new socketIO.Server(server, {
     cors: {
         origin:  origin: ['https://queryboat.netlify.app', '*'] 
-        methods: ['GET', 'POST']
+        methods: ['GET', 'POST'],
+        someSite : 'none',
+        secure : true
     }
 })
+io.origins(['https://queryboat.netlify.app']);
 
 app.use(cookieParser())
 app.use(userAuth)
