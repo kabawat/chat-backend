@@ -13,11 +13,10 @@ app.use(express.json())
 app.use(cors())
 app.use(express.urlencoded({ extended: true }))
 const io = socketIO(server,{cors: {
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST"],
-    allowedHeaders: ["my-custom-header"],
-    credentials: true}
-  })
+    origin: true,
+    credentials: true,
+  },
+  allowEIO3: true,})
   
 app.use(cookieParser())
 app.use(userAuth)
