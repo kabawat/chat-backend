@@ -12,11 +12,14 @@ const { socketModal } = require('./controller/connection')
 app.use(express.json())
 app.use(cors())
 app.use(express.urlencoded({ extended: true }))
-const io = socketIO(server,{cors: {
-    origin: true,
-    credentials: true,
-  },
-  allowEIO3: true,})
+const io = socketIO(server,{
+    cors: {
+    origin: “*”,
+    methods: [“GET”, “POST”],
+    allowedHeaders: [‘Access-Control-Allow-Origin’]
+},
+maxHttpBufferSize: 1e8
+})
   
 app.use(cookieParser())
 app.use(userAuth)
