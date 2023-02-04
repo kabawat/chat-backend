@@ -11,14 +11,15 @@ const port = process.env.PORT || 2917
 const { socketModal } = require('./controller/connection')
 app.use(express.json())
 const corsOptions = {
-    origin: "https://queryboat.netlify.app",
+    origin: ["https://queryboat.netlify.app", "http://localhost:3000"],
+    
     credentials: true
 };
 
 app.use(cors(corsOptions))
 app.use(express.urlencoded({ extended: true }))
 const io = socketIO(server)
-io.origins(["https://queryboat.netlify.app"])
+io.origins(["https://queryboat.netlify.app","http://localhost:3000"])
 app.use(cookieParser())
 app.use(userAuth)
 
