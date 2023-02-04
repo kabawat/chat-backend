@@ -18,8 +18,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions))
 app.use(express.urlencoded({ extended: true }))
-const io = socketIO(server)
-io.origins(["https://queryboat.netlify.app","http://localhost:3000"])
+const io = socketIO(server,{cors: {origin: "*"}})
 app.use(cookieParser())
 app.use(userAuth)
 
