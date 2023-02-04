@@ -14,9 +14,9 @@ app.use(cors())
 app.use(express.urlencoded({ extended: true }))
 const io = socketIO(server,{
     cors: {
-    origin: “*”,
-    methods: [“GET”, “POST”],
-    allowedHeaders: [‘Access-Control-Allow-Origin’]
+    origin: "*",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Access-Control-Allow-Origin"]
 },
 maxHttpBufferSize: 1e8
 })
