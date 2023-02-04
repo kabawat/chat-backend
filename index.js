@@ -13,7 +13,7 @@ app.use(express.json())
 app.use(cors())
 app.use(express.urlencoded({ extended: true }))
 const io = socketIO(server,{cors: {
-    origin: "https://example.com",
+    origin: "http://localhost:3000",
     methods: ["GET", "POST"],
     allowedHeaders: ["my-custom-header"],
     credentials: true}
@@ -21,7 +21,13 @@ const io = socketIO(server,{cors: {
   
 app.use(cookieParser())
 app.use(userAuth)
-
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  res.header("Access-Control-Allow-Headers", "Content-Type");
+  res.header("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS");
+  next();
+});
 server.listen(port, () => {
     console.log(`click here http://localhost:${port}`)
 })
