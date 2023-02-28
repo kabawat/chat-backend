@@ -24,9 +24,6 @@ const io = new socketIO.Server(server, {
 })
 app.use(userAuth)
 
-server.listen(port, () => {
-    console.log(`click here http://localhost:${process.env.PORT}`)
-})
 
 // socket data 
 io.on('connection', socket => {
@@ -61,3 +58,8 @@ const socketUpdate = async (socket, profile) => {
         await socketModal.replaceOne({ user: profile.user }, { [profile.user]: socket.id, user: profile.user })
     }
 }
+
+server.listen(port, () => {
+    console.log(`click here http://localhost:${process.env.PORT}`)
+})
+
