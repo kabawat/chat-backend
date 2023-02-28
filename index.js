@@ -12,8 +12,6 @@ const { socketModal } = require('./controller/connection')
 app.use(express.json())
 const corsOptions = {
     origin:"*",
-    credentials: true,
-    exposedHeaders: ["set-cookie"],
 };
 
 app.use(cors(corsOptions))
