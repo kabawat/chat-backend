@@ -16,7 +16,15 @@ const corsOptions = {
 }
 app.use(cors(corsOptions))
 
+// Add CORS header to response
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "https://queryboat.netlify.app");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 app.use(express.urlencoded({ extended: true }))
+app.use(userAuth)
 
 const io = new socketIO.Server(server, {
     cors: {
@@ -24,14 +32,6 @@ const io = new socketIO.Server(server, {
         methods: ['GET', 'POST']
     }
 })
-app.use(userAuth)
-
-// Add CORS header to response
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "https://queryboat.netlify.app");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
 
 // socket data 
 io.on('connection', socket => {
