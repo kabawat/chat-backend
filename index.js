@@ -2,7 +2,7 @@ const express = require('express')
 const http = require('http')
 const cors = require('cors')
 const app = express()
-const dotenv = require('dotenv').config()
+const port = process.env.PORT || 2917
 const userAuth = require('./router')
 const server = http.createServer(app)
 const socketIO = require('socket.io')
@@ -24,7 +24,7 @@ const io = new socketIO.Server(server, {
 })
 app.use(userAuth)
 
-server.listen(process.env.PORT, () => {
+server.listen(port, () => {
     console.log(`click here http://localhost:${process.env.PORT}`)
 })
 
