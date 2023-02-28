@@ -9,11 +9,13 @@ const socketIO = require('socket.io')
 
 const { socketModal } = require('./controller/connection')
 app.use(express.json())
-const corsOptions = {
-    origin:"https://queryboat.netlify.app",
-};
 
+// Add CORS middleware with options
+const corsOptions = {
+  origin: "https://queryboat.netlify.app"
+}
 app.use(cors(corsOptions))
+
 app.use(express.urlencoded({ extended: true }))
 
 const io = new socketIO.Server(server, {
@@ -59,7 +61,13 @@ const socketUpdate = async (socket, profile) => {
     }
 }
 
+// Add CORS header to response
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "https://queryboat.netlify.app");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 server.listen(port, () => {
     console.log(`click here http://localhost:${process.env.PORT}`)
 })
-
