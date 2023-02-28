@@ -1,72 +1,74 @@
-const express = require('express')
-const http = require('http')
-const cors = require('cors')
-const app = express()
-const port = process.env.PORT || 2917
-const userAuth = require('./router')
-const server = http.createServer(app)
-const socketIO = require('socket.io')
+const express = require('express');
+const http = require('http');
+const cors = require('cors');
+const app = express();
+const port = process.env.PORT || 2917;
+const userAuth = require('./router');
+const server = http.createServer(app);
+const socketIO = require('socket.io');
+const { socketModal } = require('./controller/connection');
 
-const { socketModal } = require('./controller/connection')
-app.use(express.json())
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Add CORS middleware with options
-const corsOptions = {
-  origin: "https://queryboat.netlify.app"
-}
-app.use(cors(corsOptions))
+// Set up CORS middleware
+app.use(cors());
 
-// Add CORS header to response
+const io = new socketIO.Server(server, {
+  cors: {
+    origin: "https://queryboat.netlify.app",
+    methods: ['GET', 'POST']
+  }
+});
+
+app.use(userAuth);
+
+// Set up CORS headers for responses
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "https://queryboat.netlify.app");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.setHeader("Access-Control-Allow-Origin", "https://queryboat.netlify.app");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.setHeader("Access-Control-Allow-Credentials", true);
   next();
 });
 
-app.use(express.urlencoded({ extended: true }))
-app.use(userAuth)
-
-const io = new socketIO.Server(server, {
-    cors: {
-        origin: "https://queryboat.netlify.app",
-        methods: ['GET', 'POST']
-    }
-})
-
-// socket data 
+// Socket data 
 io.on('connection', socket => {
-    socket.on('join', user => {
-        socketDataHandal(socket, user)
-    })
-    socket.on('massage', data => {
-        io.to(data.receiver.chatID).emit("reciveMsg", {
-            ...data
-        })
-    })
-    socket.on('updateSocket', profile => {
-        profile && socketUpdate(socket, profile)
-    })
+  socket.on('join', user => {
+    socketDataHandal(socket, user);
+  });
 
-    socket.on('refresh', data => {
-        socketUpdate(socket, { user: data })
-        socket.broadcast.emit('refreshed', data)
-    })
-})
+  socket.on('massage', data => {
+    io.to(data.receiver.chatID).emit("reciveMsg", {
+      ...data
+    });
+  });
+
+  socket.on('updateSocket', profile => {
+    profile && socketUpdate(socket, profile);
+  });
+
+  socket.on('refresh', data => {
+    socketUpdate(socket, { user: data });
+    socket.broadcast.emit('refreshed', data);
+  });
+});
 
 const socketDataHandal = async (socket, user) => {
-    const SocketData = new socketModal({
-        [user]: socket.id,
-        user: user
-    })
-    const responce = await SocketData.save()
-}
+  const SocketData = new socketModal({
+    [user]: socket.id,
+    user: user
+  });
+
+  const responce = await SocketData.save();
+};
 
 const socketUpdate = async (socket, profile) => {
-    if (profile) {
-        await socketModal.replaceOne({ user: profile.user }, { [profile.user]: socket.id, user: profile.user })
-    }
-}
+  if (profile) {
+    await socketModal.replaceOne({ user: profile.user }, { [profile.user]: socket.id, user: profile.user });
+  }
+};
 
 server.listen(port, () => {
-    console.log(`click here http://localhost:${process.env.PORT}`)
-})
+  console.log(`click here http://localhost:${process.env.PORT}`);
+});
