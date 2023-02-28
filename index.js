@@ -2,7 +2,6 @@ const express = require('express')
 const http = require('http')
 const cors = require('cors')
 const app = express()
-const cookieParser = require('cookie-parser')
 const dotenv = require('dotenv').config()
 const userAuth = require('./router')
 const server = http.createServer(app)
@@ -11,7 +10,7 @@ const socketIO = require('socket.io')
 const { socketModal } = require('./controller/connection')
 app.use(express.json())
 const corsOptions = {
-    origin:"*",
+    origin:"https://queryboat.netlify.app",
 };
 
 app.use(cors(corsOptions))
@@ -19,12 +18,10 @@ app.use(express.urlencoded({ extended: true }))
 
 const io = new socketIO.Server(server, {
     cors: {
-        origin: '*',
+        origin: "https://queryboat.netlify.app",
         methods: ['GET', 'POST']
     }
 })
-
-app.use(cookieParser())
 app.use(userAuth)
 
 server.listen(process.env.PORT, () => {
