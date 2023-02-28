@@ -1,42 +1,44 @@
 const { chatModal, userModal, socketModal } = require('../connection')
 
 // create room 
-exports.newchat = (req, res) => {
+exports.newchat = async (req, res) => {
     const { sender, receiver } = req.body
-    if (sender && receiver) {
-        const findData = async () => {
+    try {
+        if (sender && receiver) {
             const sendUser = await userModal.findOne({ user: sender })
             const recUser = await userModal.findOne({ user: receiver })
             const socketData = await socketModal.findOne({ user: receiver })
-            if (!sendUser || !recUser) {
-                res.status(409).json({
-                    status_code: 409,
-                    status: false,
-                    data: {},
-                    msg: 'invalid credentials'
-                })
+            if (sendUser && recUser) {
+                const isExist = await chatModal.findOne({ sender, receiver })
+                if (isExist === null) {
+                    const newChat = new chatModal({
+                        chatID: socketData[receiver],
+                        sender: sender,
+                        receiver: receiver,
+                    })
+                    newChat.save()
+                    res.status(200).json({
+                        status_code: 200,
+                        status: true,
+                        data: { ...req.body, chatID: socketData[receiver] },
+                        massage: 'Chat created'
+                    })
+                } else {
+                    throw new Error('chat Already exist')
+                }
+
             } else {
-                const newChat = new chatModal({
-                    chatID: socketData[receiver],
-                    sender: sender,
-                    receiver: receiver,
-                })
-                newChat.save()
-                res.status(200).json({
-                    status_code: 200,
-                    status: true,
-                    data: { ...req.body, chatID: socketData[receiver] },
-                    msg: 'Chat created'
-                })
+                throw new Error('invalid credentials')
             }
+        } else {
+            throw new Error('invalid credentials')
         }
-        findData()
-    } else {
+    } catch (error) {
         res.status(409).json({
             status_code: 409,
             status: false,
             data: {},
-            msg: 'invalid credentials'
+            massage: error.message
         })
     }
 }

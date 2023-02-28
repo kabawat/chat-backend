@@ -16,7 +16,7 @@ userAuth.get('/profile', userProfile)
 userAuth.post('/newchat', newchat)
 userAuth.get('/userChat', chatList)
 userAuth.get('/chatUser_Information', chatUserInfo)
-userAuth.get('/receiver_profile', verify, getReceiverProfile)
+userAuth.get('/receiver_profile', getReceiverProfile)
 
 // delete API 
 userAuth.delete('/delete-chat', deleteChat)

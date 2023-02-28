@@ -44,9 +44,7 @@ const chatTable = new mongoose.Schema({
 
 const chatSocket = new mongoose.Schema({}, { strict: false })
 
-// model 
 const userModal = new mongoose.model('userDetaile', SchemaModal)
 const chatModal = new mongoose.model('chatList', chatTable)
 const socketModal = new mongoose.model('socketIds', chatSocket)
-
 module.exports = { userModal, chatModal, socketModal }

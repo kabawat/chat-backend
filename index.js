@@ -7,41 +7,40 @@ const dotenv = require('dotenv').config()
 const userAuth = require('./router')
 const server = http.createServer(app)
 const socketIO = require('socket.io')
-const port = process.env.PORT || 2917
+
 const { socketModal } = require('./controller/connection')
 app.use(express.json())
-app.use(cors())
+const corsOptions = {
+    origin: [
+        "http://localhost:3000",
+        "http://localhost:3001",
+        "http://localhost:3002",
+    ],
+    credentials: true,
+    exposedHeaders: ["set-cookie"],
+};
+
+app.use(cors(corsOptions))
 app.use(express.urlencoded({ extended: true }))
-const io = socketIO(server,{
+
+const io = new socketIO.Server(server, {
     cors: {
-    origin: "*",
-    methods: ["GET", "POST"],
-    allowedHeaders: ["Access-Control-Allow-Origin"]
-},
-maxHttpBufferSize: 1e8
+        origin: '*',
+        methods: ['GET', 'POST']
+    }
 })
-  
+
 app.use(cookieParser())
 app.use(userAuth)
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  res.header("Access-Control-Allow-Headers", "Content-Type");
-  res.header("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS");
-  next();
-});
-server.prependListener("request", (req, res) => {
-   res.setHeader("Access-Control-Allow-Origin", "*");
-});
-server.listen(port, () => {
-    console.log(`click here http://localhost:${port}`)
+
+server.listen(process.env.PORT, () => {
+    console.log(`click here http://localhost:${process.env.PORT}`)
 })
 
 // socket data 
 io.on('connection', socket => {
     socket.on('join', user => {
         socketDataHandal(socket, user)
-        socket.broadcast.emit('joined', user)
     })
     socket.on('massage', data => {
         io.to(data.receiver.chatID).emit("reciveMsg", {
@@ -51,6 +50,11 @@ io.on('connection', socket => {
     socket.on('updateSocket', profile => {
         profile && socketUpdate(socket, profile)
     })
+
+    socket.on('refresh', data => {
+        socketUpdate(socket, { user: data })
+        socket.broadcast.emit('refreshed', data)
+    })
 })
 
 const socketDataHandal = async (socket, user) => {
@@ -58,8 +62,11 @@ const socketDataHandal = async (socket, user) => {
         [user]: socket.id,
         user: user
     })
-    await SocketData.save()
+    const responce = await SocketData.save()
 }
+
 const socketUpdate = async (socket, profile) => {
-    await socketModal.replaceOne({ user: profile.user }, { [profile.user]: socket.id, user: profile.user })
+    if (profile) {
+        await socketModal.replaceOne({ user: profile.user }, { [profile.user]: socket.id, user: profile.user })
+    }
 }

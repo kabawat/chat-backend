@@ -3,20 +3,13 @@ const jwt = require('jsonwebtoken')
 exports.verify = (req, res, next) => {
     const token = req.headers.authorization
     try {
-        if (token) {
-            const isValidUser = jwt.verify(token, process.env.PRIVETKEY)
-            if (isValidUser) {
-                userModal.findOne({ user: isValidUser.user }).then((result) => {
-                    next()
-                })
-            } else {
-                throw false
-            }
-        } else {
-            res.status(401).json({
-                status: false,
-                massage: 'invalid authentication credentials for the requested resource',
+        const isValidUser = jwt.verify(token, process.env.PRIVETKEY)
+        if (isValidUser) {
+            userModal.findOne({ user: isValidUser.user }).then((result) => {
+                next()
             })
+        } else {
+            throw false
         }
     } catch (error) {
         res.status(401).json({
