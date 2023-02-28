@@ -11,12 +11,7 @@ const socketIO = require('socket.io')
 const { socketModal } = require('./controller/connection')
 app.use(express.json())
 const corsOptions = {
-    origin: [
-        "http://localhost:3000",
-        "http://localhost:3001",
-        "http://localhost:3002",
-        "https://queryboat.netlify.app"
-    ],
+    origin:"*",
     credentials: true,
     exposedHeaders: ["set-cookie"],
 };
