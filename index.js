@@ -14,6 +14,7 @@ const corsOptions = {
     origin: [
         "http://localhost:3000",
         "http://localhost:3001",
+        "https://queryboat.netlify.app"
     ]
 };
 
@@ -22,7 +23,7 @@ app.use(express.urlencoded({ extended: true }))
 
 const io = new socketIO.Server(server, {
     cors: {
-        origin: 'http://192.168.29.4:3000',
+        origin: 'https://queryboat.netlify.app',
         methods: ['GET', 'POST'],
             
   allowedHeaders: [
