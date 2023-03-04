@@ -34,7 +34,8 @@ const io = new socketIO.Server(server, {
             'Content-Type',
         ]
         // setHeader:["Access-Control-Allow-Origin", "*"]
-    }
+    },
+    cors_allowed_origins:"*"
 
 })
 app.use(userAuth)
