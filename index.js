@@ -24,7 +24,7 @@ const io = new socketIO.Server(server, {
         allowedHeaders: [
             'Content-Type',
         ],
-        // setHeader:("Access-Control-Allow-Origin", "*")
+        setHeader:["Access-Control-Allow-Origin", "*"]
     }
 
 })
