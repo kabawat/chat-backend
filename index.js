@@ -12,9 +12,25 @@ app.use(express.json())
 const corsOptions = {
     origin: "https://queryboat.netlify.app"
 };
-// app.prependListener("request", (req, res) => {
-//     res.setHeader("Access-Control-Allow-Origin", "*");
-//  });
+ 
+app.use(function (req, res, next) {
+
+    // Website you wish to allow to connect
+    res.setHeader('Access-Control-Allow-Origin', 'https://queryboat.netlify.app');
+
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+    // Request headers you wish to allow
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+    // Set to true if you need the website to include cookies in the requests sent
+    // to the API (e.g. in case you use sessions)
+    res.setHeader('Access-Control-Allow-Credentials', true);
+
+    // Pass to next layer of middleware
+    next();
+});
 app.use(cors(corsOptions))
 app.use(express.urlencoded({ extended: true }))
 const io = new socketIO.Server(server, {
@@ -23,8 +39,8 @@ const io = new socketIO.Server(server, {
         methods: ['GET', 'POST'],
         allowedHeaders: [
             'Content-Type',
-        ],
-        setHeader:["Access-Control-Allow-Origin", "*"]
+        ]
+        // setHeader:["Access-Control-Allow-Origin", "*"]
     }
 
 })
