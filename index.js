@@ -16,7 +16,7 @@ const corsOptions = {
 app.use(function (req, res, next) {
 
     // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', 'https://queryboat.netlify.app/');
+    res.setHeader('Access-Control-Allow-Origin', 'https://queryboat.netlify.app');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
     res.setHeader('Access-Control-Allow-Credentials', true);
@@ -24,7 +24,6 @@ app.use(function (req, res, next) {
     // Pass to next layer of middleware
     next();
 });
-console.log("======",req)
 app.use(cors(corsOptions))
 app.use(express.urlencoded({ extended: true }))
 const io = new socketIO.Server(server, {
