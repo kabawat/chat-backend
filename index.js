@@ -2,7 +2,6 @@ const express = require('express')
 const http = require('http')
 const cors = require('cors')
 const app = express()
-const cookieParser = require('cookie-parser')
 const dotenv = require('dotenv').config()
 const userAuth = require('./router')
 const server = http.createServer(app)
@@ -16,8 +15,6 @@ const corsOptions = {
         "http://localhost:3001",
         "http://localhost:3002",
     ],
-    credentials: true,
-    exposedHeaders: ["set-cookie"],
 };
 
 app.use(cors(corsOptions))
@@ -30,7 +27,6 @@ const io = new socketIO.Server(server, {
     }
 })
 
-app.use(cookieParser())
 app.use(userAuth)
 
 server.listen(process.env.PORT, () => {
