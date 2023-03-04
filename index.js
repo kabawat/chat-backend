@@ -35,7 +35,7 @@ const io = new socketIO.Server(server, {
         ]
         // setHeader:["Access-Control-Allow-Origin", "*"]
     },
-    cors_allowed_origins:"*"
+    cors_allowed_origins:"https://queryboat.netlify.app"
 
 })
 app.use(userAuth)
