@@ -12,9 +12,9 @@ app.use(express.json())
 const corsOptions = {
     origin: "https://queryboat.netlify.app"
 };
-app.prependListener("request", (req, res) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
- });
+// app.prependListener("request", (req, res) => {
+//     res.setHeader("Access-Control-Allow-Origin", "*");
+//  });
 app.use(cors(corsOptions))
 app.use(express.urlencoded({ extended: true }))
 const io = new socketIO.Server(server, {
@@ -23,7 +23,8 @@ const io = new socketIO.Server(server, {
         methods: ['GET', 'POST'],
         allowedHeaders: [
             'Content-Type',
-        ]
+        ],
+        setHeader:("Access-Control-Allow-Origin", "*")
     }
 
 })
