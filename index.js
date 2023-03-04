@@ -2,6 +2,7 @@ const express = require('express')
 const http = require('http')
 const cors = require('cors')
 const app = express()
+const cookieParser = require('cookie-parser')
 const dotenv = require('dotenv').config()
 const userAuth = require('./router')
 const server = http.createServer(app)
@@ -13,8 +14,7 @@ const corsOptions = {
     origin: [
         "http://localhost:3000",
         "http://localhost:3001",
-        "http://localhost:3002",
-    ],
+    ]
 };
 
 app.use(cors(corsOptions))
@@ -22,11 +22,17 @@ app.use(express.urlencoded({ extended: true }))
 
 const io = new socketIO.Server(server, {
     cors: {
-        origin: '*',
-        methods: ['GET', 'POST']
+        origin: 'http://192.168.29.4:3000',
+        methods: ['GET', 'POST'],
+            
+  allowedHeaders: [
+    'Content-Type',
+  ]
     }
+
 })
 
+app.use(cookieParser())
 app.use(userAuth)
 
 server.listen(process.env.PORT, () => {
