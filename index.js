@@ -2,20 +2,15 @@ const express = require('express')
 const http = require('http')
 const cors = require('cors')
 const app = express()
-const cookieParser = require('cookie-parser')
 const dotenv = require('dotenv').config()
 const userAuth = require('./router')
 const server = http.createServer(app)
 const socketIO = require('socket.io')
-
+const port = process.env.PORT || 2917
 const { socketModal } = require('./controller/connection')
 app.use(express.json())
 const corsOptions = {
-    origin: [
-        "http://localhost:3000",
-        "http://localhost:3001",
-        "https://queryboat.netlify.app"
-    ]
+    origin: "https://queryboat.netlify.app"
 };
 
 app.use(cors(corsOptions))
@@ -31,12 +26,10 @@ const io = new socketIO.Server(server, {
     }
 
 })
-
-app.use(cookieParser())
 app.use(userAuth)
 
-server.listen(process.env.PORT, () => {
-    console.log(`click here http://localhost:${process.env.PORT}`)
+server.listen(port, () => {
+    console.log(`click here http://localhost:${port}`)
 })
 
 // socket data 
