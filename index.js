@@ -1,5 +1,5 @@
 const express = require('express')
-const http = require('http')
+const http = require('https')
 const cors = require('cors')
 const app = express()
 const dotenv = require('dotenv').config()
@@ -15,18 +15,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions))
 app.use(express.urlencoded({ extended: true }))
-app.use(function(req, res, next) {
-    // Set the allowed origins
-    res.setHeader('Access-Control-Allow-Origin', 'https://queryboat.netlify.app');
-  
-    // Set the allowed methods, headers, and credentials
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-  
-    // Pass to next layer of middleware
-    next();
-  });
 const io = new socketIO.Server(server, {
     cors: {
         origin: 'https://queryboat.netlify.app',
