@@ -19,7 +19,7 @@ app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', 'https://queryboat.netlify.app');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-    res.setHeader('Access-Control-Allow-Credentials', true);
+    res.setHeader('Access-Control-Allow-Credentials', false);
 
     // Pass to next layer of middleware
     next();
@@ -34,8 +34,7 @@ const io = new socketIO.Server(server, {
             'Content-Type',
         ]
         // setHeader:["Access-Control-Allow-Origin", "*"]
-    },
-    cors_allowed_origins:"https://queryboat.netlify.app"
+    }
 
 })
 app.use(userAuth)
