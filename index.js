@@ -12,6 +12,9 @@ const { socketModal } = require("./controller/connection");
 app.use(express.json());
 const corsOptions = {
   origin: "*",
+  optionsSuccessStatus: 200,
+  methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type"],
   //   origin: [
   //     "http://localhost:3000",
   //     "http://localhost:3001",
@@ -26,6 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 const io = new socketIO.Server(server, {
   cors: {
     origin: "*",
+    optionsSuccessStatus: 200
     // origin: [
     //   "http://localhost:3000",
     //   "http://localhost:3001",
@@ -33,7 +37,6 @@ const io = new socketIO.Server(server, {
     //   "http://192.168.0.2:3000/",
     // ],
     methods: ["GET", "POST"],
-
     allowedHeaders: ["Content-Type"],
   },
 });
