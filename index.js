@@ -12,7 +12,6 @@ const { socketModal } = require("./controller/connection");
 app.use(express.json());
 const corsOptions = {
   origin: "*",
-  optionsSuccessStatus: 200,
   //   origin: [
   //     "http://localhost:3000",
   //     "http://localhost:3001",
