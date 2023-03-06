@@ -1,78 +1,83 @@
-const express = require('express')
-const http = require('http')
-const cors = require('cors')
-const app = express()
-const dotenv = require('dotenv').config()
-const userAuth = require('./router')
-const server = http.createServer(app)
-const socketIO = require('socket.io')
-const port = process.env.PORT || 2917
-const { socketModal } = require('./controller/connection')
-app.use(express.json())
+const express = require("express");
+const http = require("http");
+const cors = require("cors");
+const app = express();
+const cookieParser = require("cookie-parser");
+const dotenv = require("dotenv").config();
+const userAuth = require("./router");
+const server = http.createServer(app);
+const socketIO = require("socket.io");
+
+const { socketModal } = require("./controller/connection");
+app.use(express.json());
 const corsOptions = {
-    origin: "https://queryboat.netlify.app"
+  origin: "*",
+  //   origin: [
+  //     "http://localhost:3000",
+  //     "http://localhost:3001",
+  //     "http://192.168.29.4:3000",
+  //     "http://192.168.0.2:3000/",
+  //   ],
 };
- 
-app.use(function (req, res, next) {
 
-    // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', 'https://queryboat.netlify.app');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-    res.setHeader('Access-Control-Allow-Credentials', false);
+app.use(cors(corsOptions));
+app.use(express.urlencoded({ extended: true }));
 
-    // Pass to next layer of middleware
-    next();
-});
-app.use(cors(corsOptions))
-app.use(express.urlencoded({ extended: true }))
 const io = new socketIO.Server(server, {
-    cors: {
-        origin: 'https://queryboat.netlify.app',
-        methods: ['GET', 'POST'],
-        allowedHeaders: [
-            'Content-Type',
-        ]
-        // setHeader:["Access-Control-Allow-Origin", "*"]
-    }
+  cors: {
+    origin: "*",
+    // origin: [
+    //   "http://localhost:3000",
+    //   "http://localhost:3001",
+    //   "http://192.168.29.4:3000",
+    //   "http://192.168.0.2:3000/",
+    // ],
+    methods: ["GET", "POST"],
 
-})
-app.use(userAuth)
+    allowedHeaders: ["Content-Type"],
+  },
+});
 
-server.listen(port, () => {
-    console.log(`click here http://localhost:${port}`)
-})
+app.use(cookieParser());
+app.use(userAuth);
 
-// socket data 
-io.on('connection', socket => {
-    socket.on('join', user => {
-        socketDataHandal(socket, user)
-    })
-    socket.on('massage', data => {
-        io.to(data.receiver.chatID).emit("reciveMsg", {
-            ...data
-        })
-    })
-    socket.on('updateSocket', profile => {
-        profile && socketUpdate(socket, profile)
-    })
+server.listen(process.env.PORT, () => {
+  console.log(`click here http://localhost:${process.env.PORT}`);
+});
 
-    socket.on('refresh', data => {
-        socketUpdate(socket, { user: data })
-        socket.broadcast.emit('refreshed', data)
-    })
-})
+// socket data
+io.on("connection", (socket) => {
+  socket.on("join", (user) => {
+    socketDataHandal(socket, user);
+  });
+  socket.on("massage", (data) => {
+    io.to(data.receiver.chatID).emit("reciveMsg", {
+      ...data,
+    });
+  });
+  socket.on("updateSocket", (profile) => {
+    profile && socketUpdate(socket, profile);
+  });
+
+  socket.on("refresh", (data) => {
+    socketUpdate(socket, { user: data });
+    socket.broadcast.emit("refreshed", data);
+  });
+});
 
 const socketDataHandal = async (socket, user) => {
-    const SocketData = new socketModal({
-        [user]: socket.id,
-        user: user
-    })
-    const responce = await SocketData.save()
-}
+  const SocketData = new socketModal({
+    [user]: socket.id,
+    user: user,
+  });
+  const responce = await SocketData.save();
+};
 
 const socketUpdate = async (socket, profile) => {
-    if (profile) {
-        await socketModal.replaceOne({ user: profile.user }, { [profile.user]: socket.id, user: profile.user })
-    }
-}
+  if (profile) {
+    await socketModal.replaceOne(
+      { user: profile.user },
+      { [profile.user]: socket.id, user: profile.user }
+    );
+  }
+};
