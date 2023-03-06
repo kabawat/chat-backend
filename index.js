@@ -26,7 +26,6 @@ app.use(express.urlencoded({ extended: true }));
 const io = new socketIO.Server(server, {
   cors: {
     origin: "*",
-    optionsSuccessStatus: 200
     // origin: [
     //   "http://localhost:3000",
     //   "http://localhost:3001",
