@@ -21,12 +21,8 @@ const io = new socketIO.Server(server, {
     cors: {
         origin: 'http://localhost:3000',
         methods: ['GET', 'POST'],
-        credentials: 'include',
-
-        allowedHeaders: [
-            'Content-Type',
-        ]
-    }
+        credentials: true,
+      },
 
 })
 
