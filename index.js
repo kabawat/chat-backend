@@ -12,7 +12,7 @@ const { socketModal } = require('./controller/connection')
 app.use(express.json())
 const corsOptions = {
     origin: "http://localhost:3000",
-    credentials: 'include'
+    // credentials: 'include',
 };
 
 app.use(cors(corsOptions))
