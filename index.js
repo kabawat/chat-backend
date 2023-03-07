@@ -6,10 +6,16 @@ const { Server } = require('socket.io')
 const port = process.env.PORT || 2917
 const app = express()
 const server = http.createServer(app)
+const corsOptions = {
+    origin: '*',
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type']
+};
+
+app.use(cors(corsOptions));
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(cors())
 
 
 const io = new Server(server, {
