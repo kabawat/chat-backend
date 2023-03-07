@@ -12,7 +12,6 @@ const { socketModal } = require('./controller/connection')
 app.use(express.json())
 const corsOptions = {
     origin: "http://localhost:3000",
-    // credentials: 'include',
 };
 
 app.use(cors(corsOptions))
@@ -22,6 +21,7 @@ const io = new socketIO.Server(server, {
     cors: {
         origin: 'http://localhost:3000',
         methods: ['GET', 'POST'],
+        credentials: 'include',
 
         allowedHeaders: [
             'Content-Type',
