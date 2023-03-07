@@ -1,5 +1,6 @@
 const { userModal } = require('../connection')
 exports.singUpValidation = (req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
     const { user, email, pwd } = req.body
     const confirm = async () => {
         const isEmail = await userModal.findOne({ email })

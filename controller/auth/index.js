@@ -1,6 +1,7 @@
 const { userModal } = require('../connection')
 const jwt = require('jsonwebtoken')
 exports.verify = (req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
     const token = req.headers.authorization
     try {
         const isValidUser = jwt.verify(token, process.env.PRIVETKEY)

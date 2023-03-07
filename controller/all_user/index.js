@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 const { userModal, socketModal } = require('../connection')
 exports.AllUser = (req, res) => {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
     const getdata = async () => {
         const data = await userModal.find()
         const socketDB = await socketModal.find()
@@ -25,6 +26,7 @@ exports.AllUser = (req, res) => {
 }
 
 exports.userProfile = (req, res) => {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
     const requestToken = req.headers.authorization
     const data = jwt.decode(requestToken)
     if (data) {
@@ -54,6 +56,7 @@ exports.userProfile = (req, res) => {
 }
 
 exports.chatUserInfo = (req, res) => {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
     const getData = async () => {
         const { email } = req.body
         const result = await userModal.findOne({ email })
@@ -79,6 +82,7 @@ exports.chatUserInfo = (req, res) => {
 }
 
 exports.getReceiverProfile = (req, res) => {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
     const getPofile = async () => {
         const { receiver } = req.query
         const profile = await userModal.findOne({ user: receiver })

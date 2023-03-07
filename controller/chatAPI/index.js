@@ -2,6 +2,7 @@ const { chatModal, userModal, socketModal } = require('../connection')
 
 // create room 
 exports.newchat = async (req, res) => {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
     const { sender, receiver } = req.body
     try {
         if (sender && receiver) {
@@ -45,6 +46,7 @@ exports.newchat = async (req, res) => {
 
 // fetch chat Data 
 exports.chatList = (req, res) => {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
     const getdata = async () => {
         const { sender } = req.query
         const chatsUsers = await chatModal.find({ sender })

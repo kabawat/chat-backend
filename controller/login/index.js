@@ -1,6 +1,7 @@
 const { userModal, socketModal } = require('../connection')
 const jwt = require('jsonwebtoken')
 exports.loginVerify = (req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
     const { user, pwd } = req.body
     const verify = async () => {
         const result = await userModal.findOne({ user, pwd })
