@@ -20,8 +20,9 @@ const io = new Server(server, {
 })
 
 io.on("connection", socket => {
-    console.log(socket.id)
-    socket.emit('join', socket)
+    socket.on('join', data => {
+        console.log("data : ", data)
+    })
 })
 
 app.get("/", (req, res) => {
