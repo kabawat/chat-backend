@@ -5,15 +5,15 @@ const http = require('http')
 const server = http.createServer(app)
 const socketIO = require('socket.io')
 
-server.use(express.json())
-server.use(express.urlencoded({ extended: true }))
-server.use(cors())
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+app.use(cors())
 
-server.get("/", (req, res) => {
+app.get("/", (req, res) => {
     res.send("hello word")
 })
 
-server.post("/", (req, res) => {
+app.post("/", (req, res) => {
     res.send(req.body)
 })
 server.listen(process.env.PORT, () => {
