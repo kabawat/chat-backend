@@ -1,9 +1,11 @@
 const express = require('express')
-const cors = require('cors')
-const app = express()
 const http = require('http')
-const server = http.createServer(app)
+const cors = require('cors')
 const socketIO = require('socket.io')
+
+const port = process.env.PORT || 2917
+const app = express()
+const server = http.createServer(app)
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -15,17 +17,22 @@ const io = socketIO.Server(server, {
         methods: ['GET', 'POST'],
     }
 })
+
 io.emit("connection", socket => {
+    console.log(socket.id)
     socket.emit('join', socket.id)
 })
 
 app.get("/", (req, res) => {
-    res.send("hello word")
+    res.send({
+        massage: "hello word ",
+        port: process.env.PORT
+    })
 })
 
 app.post("/", (req, res) => {
     res.send(req.body)
 })
-server.listen(process.env.PORT, () => {
-    console.log(`click here http://localhost:${process.env.PORT}`)
+server.listen(port, () => {
+    console.log(`click here http://localhost:${process.env.PORT || 2917}`)
 })
