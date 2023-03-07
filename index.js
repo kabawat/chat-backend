@@ -10,28 +10,18 @@ const port = process.env.PORT || 2917
 const { socketModal } = require('./controller/connection')
 app.use(express.json())
 const corsOptions = {
-    origin: "https://queryboat.netlify.app"
+    origin: "https://queryboat.netlify.app",
+    credentials:'include',
 };
- 
-app.use(function (req, res, next) {
 
-    // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', 'https://queryboat.netlify.app');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-    res.setHeader('Access-Control-Allow-Credentials', false);
-
-    // Pass to next layer of middleware
-    next();
-});
 app.use(cors(corsOptions))
 app.use(express.urlencoded({ extended: true }))
 const io = new socketIO.Server(server, {
     cors: {
-        origin: 'https://queryboat.netlify.app',
+        origin: 'http://localhost:3000',
         methods: ['GET', 'POST'],
         allowedHeaders: [
-            'Content-Type',
+            'Content-Type'
         ]
         // setHeader:["Access-Control-Allow-Origin", "*"]
     }
