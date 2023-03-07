@@ -2,7 +2,6 @@ const express = require('express')
 const http = require('http')
 const cors = require('cors')
 const app = express()
-const cookieParser = require('cookie-parser')
 const dotenv = require('dotenv').config()
 const userAuth = require('./router')
 const server = http.createServer(app)
@@ -21,14 +20,11 @@ const io = new socketIO.Server(server, {
     cors: {
         origin: 'http://localhost:3000',
         methods: ['GET', 'POST'],
-        credentials: true,
       },
 
 })
 
-app.use(cookieParser())
 app.use(userAuth)
-
 server.listen(process.env.PORT, () => {
     console.log(`click here http://localhost:${process.env.PORT}`)
 })
