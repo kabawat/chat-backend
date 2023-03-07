@@ -9,6 +9,16 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cors())
 
+const io = socketIO.Server(server, {
+    cors: {
+        origin: 'http://localhost:3000',
+        methods: ['GET', 'POST'],
+    }
+})
+io.emit("connection", socket => {
+    socket.emit('join', socket.id)
+})
+
 app.get("/", (req, res) => {
     res.send("hello word")
 })
