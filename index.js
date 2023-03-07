@@ -1,7 +1,7 @@
 const express = require('express')
 const http = require('http')
 const cors = require('cors')
-const socketIO = require('socket.io')
+const { Server } = require('socket.io')
 
 const port = process.env.PORT || 2917
 const app = express()
@@ -11,17 +11,18 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cors())
 
-const io = new socketIO.Server(server, {
+
+const io = new Server(server, {
     cors: {
         origin: 'http://localhost:3000',
         methods: ['GET', 'POST'],
     }
 })
 
-// io.emit("connection", socket => {
-//     console.log(socket.id)
-//     socket.emit('join', socket.id)
-// })
+io.on("connection", socket => {
+    console.log(socket.id)
+    socket.emit('join', socket)
+})
 
 app.get("/", (req, res) => {
     res.send({
